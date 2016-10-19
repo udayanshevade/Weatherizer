@@ -1,55 +1,43 @@
 import React from 'react';
+import Details from './Details';
+import Main from './Main';
+import NameSearch from './NameSearch';
 
-const Weather = (props) => {
+class Weather extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(e) {
+    console.log(e.target);
+    if (this.props.inputActive && e.target.id !== 'locationInput') {
+      this.props.closeInput();
+    }
+  }
+  render() {
+    const data = this.props.data;
+    const date = new Date(data.dt);
 
-  const data = props.data;
+    return (
+      <section className="weather-content" onClick={ this.handleClick }>
+        <header className="weather-header">
+          <NameSearch name={data.name}
+            openInput={ this.props.openInput }
+            newSearch={ this.props.newSearch }
+            inputActive={ this.props.inputActive } />
+        </header>
 
-  const pressure = data.main.pressure;
-  const humidity = data.main.humidity;
-  const wind = data.wind.speed;
+        <div onClick={ this.props.closeInput }>
 
-  return (
-    <section className="weather-content">
-      <header className="weather-header">
-        <span className="location-subtitle">Weather for:</span>
-        <h1 className="location-name">{ data.name }</h1>
-      </header>
-      <div className="weather-main">
-        <img className="weather-icon"
-          alt={ `Icon for ${data.weather[0].description}` }
-          src={ `http://openweathermap.org/img/w/${data.weather[0].icon}.png` }/>
-        <h2 className="temperature">
-          { data.main.temp } <span className="temp-unit"></span>
-        </h2>
-        <h3 className="weather-breakdown">
-          { data.weather[0].main }
-        </h3>
-        <p className="weather-description">
-          { data.weather[0].description }
-        </p>
-      </div>
-      <div className="weather-details">
-        <table className="details-table">
-          <thead>
-            <tr>
-              { pressure && <th className="detail-heading">Pressure</th> }
-              { humidity && <th className="detail-heading">Humidity</th> }
-              { wind && <th className="detail-heading">Wind</th> }
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              { pressure && <td className="detail-value">{ pressure }</td> }
-              { humidity && <td className="detail-value">{ humidity }</td> }
-              { wind && <td className="detail-value">{ wind }</td> }
-            </tr>
-          </tbody>
+          <Main data={ data } unit={ this.props.unit }
+            toggleTempUnit={ this.props.toggleTempUnit }/>
 
-        </table>
-      </div>
-    </section>
-  );
+          <Details data={ data }/>
 
+        </div>
+      </section>
+    );
+  }
 };
 
 export default Weather;

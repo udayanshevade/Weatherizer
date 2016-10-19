@@ -2,7 +2,9 @@ import { combineReducers } from 'redux';
 
 const initialWeatherData = {
   data: {},
-  isFetching: false
+  tempUnit: 'celcius',
+  isFetching: false,
+  isEnteringLocation: false
 };
 
 const initialLoc = {
@@ -18,12 +20,29 @@ function weatherData(state = initialWeatherData, action) {
     case 'REQUEST_WEATHER':
       console.log('REQUESTING WEATHER');
       return Object.assign({}, state, {
-        isFetching: true
+        isFetching: action.isFetching
       });
     case 'RECEIVE_WEATHER':
       console.log('WEATHER DATA RECEIVED');
       return Object.assign({}, action.data, {
-        isFetching: false
+        tempUnit: state.tempUnit,
+        isFetching: action.isFetching
+      });
+    case 'TOGGLE_TEMP_UNIT':
+      console.log('TOGGLING TEMP UNIT');
+      const unit = (state.tempUnit === 'celcius') ? 'fahrenheit' : 'celcius';
+      return Object.assign({}, state, {
+        tempUnit: unit
+      });
+    case 'ACTIVATE_SEARCH_INPUT':
+      console.log('OPENING SEARCH INPUT');
+      return Object.assign({}, state, {
+        isEnteringLocation: true
+      });
+    case 'DEACTIVATE_SEARCH_INPUT':
+      console.log('CLOSING SEARCH INPUT');
+      return Object.assign({}, state, {
+        isEnteringLocation: false
       });
     default:
       return state;

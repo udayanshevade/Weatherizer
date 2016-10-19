@@ -5,7 +5,7 @@ export const REQUEST_WEATHER = 'REQUEST_WEATHER';
 function requestWeather(coords) {
   return {
     type: REQUEST_WEATHER,
-    coords: coords
+    isFetching: true
   }
 }
 
@@ -13,18 +13,27 @@ export const RECEIVE_WEATHER = 'RECEIVE_WEATHER';
 function receiveWeather(data) {
   return {
     type: RECEIVE_WEATHER,
-    data: data
+    data: data,
+    isFetching: false
   }
 }
 
-export default function fetchWeather(coords) {
+export default function fetchWeather(val) {
   return function(dispatch) {
+    let reqURL;
 
-    dispatch(requestWeather(coords))
+    if (val && typeof val === 'object') {
+      // reqURL = `api.openweathermap.org/data/2.5/weather?lat=${val.lat}&lon=${val.lon}`;
+      reqURL = './data.json';
+    } else {
+      console.log(`Querying weather in ${val}`);
+      // reqURL = `api.openweathermap.org/data/2.5/weather?q=${val}`;
+      reqURL = './data.json';
+    }
 
-    // const reqURL = `api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}`;
+    dispatch(requestWeather())
 
-    const reqURL = './data.json';
+
 
     return fetch(reqURL)
     .then(response => response.json())
