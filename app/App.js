@@ -36,7 +36,7 @@ class App extends React.Component {
     return (
       <div className="container">
 
-        <h1 className="app-title">Weather You Know It</h1>
+        <h1 className="app-title">weatherizer</h1>
 
         { this.props.id &&
           <WeatherContainer />
@@ -56,7 +56,10 @@ const AppContainer = connect(
 const Root = ({ store }) => {
   return(
     <Provider store={ store }>
-      <AppContainer />
+      <Router history={ hashHistory }>
+        <Route path="/" component={ AppContainer }/>
+        <Route path="/forecast" component={ Forecast }/>
+      </Router>
     </Provider>
   );
 }
