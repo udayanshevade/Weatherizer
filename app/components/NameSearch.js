@@ -1,27 +1,46 @@
 import React from 'react';
-// import fetchWeather from './data/api';
+import fetchWeather from '../data/api';
 import { connect } from 'react-redux';
+
+const capitalize = (val) => {
+  let newVal = '';
+  if (val) {
+    const splitWords = val.split(' ');
+    for (let i = 0, len = splitWords.length; i < len; i++) {
+      let word = splitWords[i];
+      if (word) {
+        newVal += word[0].toUpperCase() + word.slice(1);
+        if (i < len - 1) {
+          newVal += ' ';
+        }
+      }
+    }
+  }
+  return newVal;
+}
 
 const mapStateToProps = (state) => {
   const data = state.weatherData;
   return {
     name: data.data.name,
-    newQuery: data.newQuery,
+    modifiedInput: data.query,
     inputActive: data.isEnteringLocation
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleSubmit: (e) => {
+    handleSubmit: (e, val) => {
+      val = val.trim();
       e.preventDefault();
-      console.log(e)
-      //dispatch(fetchWeather(name))
+      dispatch(fetchWeather(val))
     },
-    changeLocationInput: (e) => {
-      console.log(e);
+    modifyLocationInput: (e) => {
+      e.target.value = capitalize(e.target.value);
+      console.log(e.target.value);
       dispatch({
-        type: 'CHANGE_LOCATION_INPUT'
+        type: 'CHANGE_LOCATION_INPUT',
+        query: e.target.value
       })
     },
     openInput: () => {
@@ -34,11 +53,11 @@ const mapDispatchToProps = (dispatch) => {
 
 const NameSearch = ({
   name,
-  newQuery,
+  modifiedInput,
   inputActive,
   openInput,
   handleSubmit,
-  changeLocationInput
+  modifyLocationInput
 }) => {
 
   return (
@@ -52,19 +71,22 @@ const NameSearch = ({
       }
       { inputActive &&
 
-        <form className="location-input-form" onSubmit={ handleSubmit }>
+        <form className="location-input-form"
+          onSubmit={ (e) => {
+            handleSubmit(e, modifiedInput);
+          }
+        }>
 
           <input
             id="locationInput"
             className="location-input"
             placeholder="Enter a city"
             defaultValue={ name }
-            value={ newQuery }
-            onChange={ changeLocationInput }
+            onChange={ modifyLocationInput }
             autoFocus />
 
-          <button type="submit" className="location-input-button">
-            <i className="fa fa-search search-icon form-search-icon"></i>
+          <button id="locationInputSubmit" type="submit" className="location-input-button">
+            <i id="locationInputIcon" className="fa fa-search search-icon form-search-icon"></i>
           </button>
 
         </form>

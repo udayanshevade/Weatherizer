@@ -8,7 +8,7 @@ function requestLocation() {
 }
 
 export const RECEIVE_LOCATION = 'RECEIVE_LOCATION';
-function receiveLocation(pos) {
+export function receiveLocation(pos) {
   return {
     type: RECEIVE_LOCATION,
     position: {

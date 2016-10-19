@@ -15,11 +15,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deactiveInput: (e, inputActive) => {
-      if (inputActive && e.target.id !== 'locationInput') {
-        dispatch({
-          type: 'DEACTIVATE_SEARCH_INPUT'
-        });
+    deactivateInput: (e, inputActive) => {
+      const excludedIds = `locationInput
+        locationInputSubmit locationInputIcon`;
+      const idVal = e.target.id;
+      if (inputActive &&
+        (!excludedIds.includes(e.target.id) || !idVal)) {
+          dispatch({
+            type: 'DEACTIVATE_SEARCH_INPUT'
+          });
       }
     },
   }
@@ -29,13 +33,13 @@ const Weather = ({
   tempUnit,
   data,
   inputActive,
-  deactiveInput
+  deactivateInput
 }) => {
   return (
     <section className="weather-content"
       onClick={
         (e) => {
-          deactiveInput(e, inputActive)
+          deactivateInput(e, inputActive)
         }
       }>
 

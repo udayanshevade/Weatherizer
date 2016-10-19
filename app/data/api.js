@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
+import { receiveLocation } from './search';
 
 export const REQUEST_WEATHER = 'REQUEST_WEATHER';
 function requestWeather(coords) {
@@ -39,6 +40,9 @@ export default function fetchWeather(val) {
     .then(response => response.json())
     .then(data => {
       dispatch(receiveWeather({data: data}))
+      dispatch(receiveLocation({
+        coords: data.coord
+      }));
     }).catch(err =>
       console.log(err)
     );
