@@ -68,6 +68,7 @@ body {
   padding: 0 1rem;
   max-width: 200px;
   transition: opacity 0.15s ease-in-out;
+  cursor: pointer;
 
   .fa.search-icon {
     font-size: 2rem;
@@ -185,9 +186,9 @@ body {
   width: 100%;
 
   .details-table {
-    opacity: 0.2;
+    opacity: 0.3;
     filter: blur(0.25rem);
-    transform: scaleX(0.75);
+    transform: scaleX(0.85);
     transition: all 0.2s cubic-bezier(.04,.49,.3,.96);
   }
 

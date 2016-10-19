@@ -1,43 +1,63 @@
 import React from 'react';
 import Details from './Details';
 import Main from './Main';
-import NameSearch from './NameSearch';
+import NameSearchContainer from './NameSearch';
+import { connect } from 'react-redux';
 
-class Weather extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
+const mapStateToProps = (state) => {
+  const data = state.weatherData;
+  return {
+    tempUnit: data.unit,
+    data: data.data,
+    inputActive: data.isEnteringLocation
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deactiveInput: (e, inputActive) => {
+      if (inputActive && e.target.id !== 'locationInput') {
+        dispatch({
+          type: 'DEACTIVATE_SEARCH_INPUT'
+        });
+      }
+    },
   }
-  handleClick(e) {
-    console.log(e.target);
-    if (this.props.inputActive && e.target.id !== 'locationInput') {
-      this.props.closeInput();
-    }
-  }
-  render() {
-    const data = this.props.data;
-    const date = new Date(data.dt);
+}
 
-    return (
-      <section className="weather-content" onClick={ this.handleClick }>
-        <header className="weather-header">
-          <NameSearch name={data.name}
-            openInput={ this.props.openInput }
-            newSearch={ this.props.newSearch }
-            inputActive={ this.props.inputActive } />
-        </header>
+const Weather = ({
+  tempUnit,
+  data,
+  inputActive,
+  deactiveInput
+}) => {
+  return (
+    <section className="weather-content"
+      onClick={
+        (e) => {
+          deactiveInput(e, inputActive)
+        }
+      }>
 
-        <div onClick={ this.props.closeInput }>
+      <header className="weather-header">
+        <NameSearchContainer />
+      </header>
 
-          <Main data={ data } unit={ this.props.unit }
-            toggleTempUnit={ this.props.toggleTempUnit }/>
+      <div>
 
-          <Details data={ data }/>
+        <Main data={ data } unit={tempUnit }/>
 
-        </div>
-      </section>
-    );
-  }
+        <Details data={ data }/>
+
+      </div>
+    </section>
+  );
 };
 
-export default Weather;
+const WeatherContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Weather);
+
+
+export default WeatherContainer;

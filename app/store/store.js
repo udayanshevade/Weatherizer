@@ -4,7 +4,8 @@ const initialWeatherData = {
   data: {},
   tempUnit: 'celcius',
   isFetching: false,
-  isEnteringLocation: false
+  isEnteringLocation: false,
+  query: ''
 };
 
 const initialLoc = {
@@ -24,10 +25,7 @@ function weatherData(state = initialWeatherData, action) {
       });
     case 'RECEIVE_WEATHER':
       console.log('WEATHER DATA RECEIVED');
-      return Object.assign({}, action.data, {
-        tempUnit: state.tempUnit,
-        isFetching: action.isFetching
-      });
+      return Object.assign({}, state, action.data);
     case 'TOGGLE_TEMP_UNIT':
       console.log('TOGGLING TEMP UNIT');
       const unit = (state.tempUnit === 'celcius') ? 'fahrenheit' : 'celcius';
@@ -38,6 +36,11 @@ function weatherData(state = initialWeatherData, action) {
       console.log('OPENING SEARCH INPUT');
       return Object.assign({}, state, {
         isEnteringLocation: true
+      });
+    case 'CHANGE_LOCATION_INPUT':
+      console.log('CHANGING LOCATION INPUT');
+      return Object.assign({}, state, {
+        query: action.query
       });
     case 'DEACTIVATE_SEARCH_INPUT':
       console.log('CLOSING SEARCH INPUT');
