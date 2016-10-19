@@ -1,69 +1,70 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { Router, Route, hashHistory } from 'react-router';
+import { Provider, connect } from 'react-redux';
+import Forecast from './Components/Forecast/Forecast';
+
 import getData from './data/data';
 import fetchWeather from './data/api';
 
 import store from './store/index';
-import Weather from './components/Weather';
+import WeatherContainer from './components/Weather';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.toggleTempUnit = this.toggleTempUnit.bind(this);
-    this.openSearchInput = this.openSearchInput.bind(this);
-    this.closeSearchInput = this.closeSearchInput.bind(this);
-    this.SearchNewLocationWeather = this.SearchNewLocationWeather.bind(this);
+
+const mapStateToProps = (state) => {
+  return {
+    id: state.weatherData.data.id
   }
-  componentDidMount() {
-    // Initial data
-    this.props.store.dispatch(getData());
-  }
-  toggleTempUnit() {
-    this.props.store.dispatch({
-      type: 'TOGGLE_TEMP_UNIT',
-    });
-  }
-  openSearchInput() {
-    this.props.store.dispatch({
-      type: 'ACTIVATE_SEARCH_INPUT'
-    });
-  }
-  closeSearchInput() {
-    if (this.props.store.getState().weatherData.isEnteringLocation) {
-      this.props.store.dispatch({
-        type: 'DEACTIVATE_SEARCH_INPUT'
-      });
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getInitialData: () => {
+      dispatch(getData());
     }
   }
-  SearchNewLocationWeather(name) {
-    this.props.store.dispatch(fetchWeather(name));
+}
+
+class App extends React.Component {
+  componentDidMount() {
+    // Initial data
+    console.log(this.props);
+    this.props.getInitialData();
   }
   render() {
-    const data = this.props.store.getState();
-    const locationData = data.locationData;
-    const weatherData = data.weatherData;
-    const coords = locationData.coordinates;
-
     return (
       <div className="container">
-        <h1 className="app-title">Weather You Know It</h1>
-        { weatherData.data.id &&
-          <Weather data={ weatherData.data } unit={ weatherData.tempUnit } inputActive={ weatherData.isEnteringLocation } toggleTempUnit={ this.toggleTempUnit }
-            openInput={ this.openSearchInput }
-            closeInput={ this.closeSearchInput }
-            newSearch={ this.SearchNewLocationWeather }/>
+
+        <h1 className="app-title">weatherizer</h1>
+
+        { this.props.id &&
+          <WeatherContainer />
         }
+
       </div>
     );
   }
 };
 
-const render = () => {
-  ReactDOM.render(
-    <App store={ store }/>,
-    document.getElementById('app')
+const AppContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App);
+
+
+const Root = ({ store }) => {
+  return(
+    <Provider store={ store }>
+      <Router history={ hashHistory }>
+        <Route path="/" component={ AppContainer }/>
+        <Route path="/forecast" component={ Forecast }/>
+      </Router>
+    </Provider>
   );
 }
 
-store.subscribe(render);
-render();
+ReactDOM.render(
+  <Root store={ store }/>,
+  document.getElementById('app')
+);

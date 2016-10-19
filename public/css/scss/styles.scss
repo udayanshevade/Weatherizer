@@ -45,7 +45,7 @@ body {
 }
 
 .app-title {
-  font-size: 2.25rem;
+  font-size: 2.5rem;
   text-transform: lowercase;
   margin-top: 0;
   padding-top: 3rem;
@@ -68,6 +68,7 @@ body {
   padding: 0 1rem;
   max-width: 200px;
   transition: opacity 0.15s ease-in-out;
+  cursor: pointer;
 
   .fa.search-icon {
     font-size: 2rem;
@@ -185,9 +186,9 @@ body {
   width: 100%;
 
   .details-table {
-    opacity: 0.2;
+    opacity: 0.3;
     filter: blur(0.25rem);
-    transform: scaleX(0.75);
+    transform: scaleX(0.9);
     transition: all 0.2s cubic-bezier(.04,.49,.3,.96);
   }
 
@@ -250,6 +251,10 @@ body {
 }
 
 @media screen and (min-width: 500px) {
+  .app-title {
+    font-size: 3rem;
+  }
+
   .weather-content {
     padding: 2rem 3rem;
   }
@@ -268,7 +273,11 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+  .app-title {
+    font-size: 4rem;
+  }
   .weather-details {
+    width: auto;
     &:after {
       content: "Hover for details";
     }

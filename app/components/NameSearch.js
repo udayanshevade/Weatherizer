@@ -1,41 +1,82 @@
 import React from 'react';
+// import fetchWeather from './data/api';
+import { connect } from 'react-redux';
 
-class NameSearch extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setRef = this.setRef.bind(this);
-  }
-  setRef(ref) {
-    this.inputRef = ref;
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    let query = this.inputRef.value;
-    this.inputRef.value = '';
-    this.props.newSearch(query);
-  }
-  render() {
-    return (
-      <div>
-        { !this.props.inputActive &&
-          <h1 className="location-name"
-            onClick={ this.props.openInput }>
-            { this.props.name }
-            <i className="fa fa-search search-icon"></i>
-          </h1>
-        }
-        { this.props.inputActive &&
-          <form className="location-input-form" onSubmit={ this.handleSubmit }>
-            <input id="locationInput" className="location-input" ref={this.setRef} placeholder="Enter a city" autoFocus defaultValue={ this.props.name }/>
-            <button type="submit" className="location-input-button">
-              <i className="fa fa-search search-icon form-search-icon"></i>
-            </button>
-          </form>
-        }
-      </div>
-    );
+const mapStateToProps = (state) => {
+  const data = state.weatherData;
+  return {
+    name: data.data.name,
+    newQuery: data.newQuery,
+    inputActive: data.isEnteringLocation
   }
 }
 
-export default NameSearch;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleSubmit: (e) => {
+      e.preventDefault();
+      console.log(e)
+      //dispatch(fetchWeather(name))
+    },
+    changeLocationInput: (e) => {
+      console.log(e);
+      dispatch({
+        type: 'CHANGE_LOCATION_INPUT'
+      })
+    },
+    openInput: () => {
+      dispatch({
+        type: 'ACTIVATE_SEARCH_INPUT'
+      });
+    }
+  }
+}
+
+const NameSearch = ({
+  name,
+  newQuery,
+  inputActive,
+  openInput,
+  handleSubmit,
+  changeLocationInput
+}) => {
+
+  return (
+    <div>
+      { !inputActive &&
+        <h1 className="location-name"
+          onClick={ openInput }>
+          { name }
+          <i className="fa fa-search search-icon"></i>
+        </h1>
+      }
+      { inputActive &&
+
+        <form className="location-input-form" onSubmit={ handleSubmit }>
+
+          <input
+            id="locationInput"
+            className="location-input"
+            placeholder="Enter a city"
+            defaultValue={ name }
+            value={ newQuery }
+            onChange={ changeLocationInput }
+            autoFocus />
+
+          <button type="submit" className="location-input-button">
+            <i className="fa fa-search search-icon form-search-icon"></i>
+          </button>
+
+        </form>
+      }
+    </div>
+  );
+}
+
+
+const NameSearchContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(NameSearch);
+
+export default NameSearchContainer;
