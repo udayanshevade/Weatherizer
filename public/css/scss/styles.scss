@@ -182,11 +182,12 @@ body {
 .weather-details {
   display: inline-block;
   position: relative;
+  width: 100%;
 
   .details-table {
     opacity: 0.2;
     filter: blur(0.25rem);
-    transform: scaleX(0.5);
+    transform: scaleX(0.75);
     transition: all 0.2s cubic-bezier(.04,.49,.3,.96);
   }
 
@@ -225,7 +226,7 @@ body {
 
 .details-col {
   width: 100%;
-  padding: 1rem 0;
+  padding: 0.25rem 0;
   margin: 0 1rem;
 
   &:first-of-type {
