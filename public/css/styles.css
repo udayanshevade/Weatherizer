@@ -85,6 +85,12 @@ body {
   animation: slideOut 0.2s ease-out;
   animation-fill-mode: forwards; }
 
+.current-date {
+  font-size: 1.8rem;
+  margin-top: 3rem;
+  font-weight: 300;
+  letter-spacing: 0.1rem; }
+
 .temperature {
   display: inline-block;
   font-size: 4rem;
@@ -98,7 +104,7 @@ body {
 
 .temp-unit {
   opacity: 0.75;
-  margin-left: 1rem;
+  margin: 0 0.5rem;
   transition: opacity 0.2s ease-in-out; }
 
 .temp-unit--flipped {
@@ -130,6 +136,22 @@ body {
   animation: pulse 2.5s infinite;
   float: left;
   font-size: 6rem; }
+
+.forecast-link {
+  display: block;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 2rem;
+  margin: 1rem 0 0;
+  text-decoration: none;
+  font-variant: small-caps; }
+  .forecast-link .forecast-icon {
+    font-size: 1.6rem;
+    font-weight: 300;
+    transition: transform 0.1s ease-out; }
+  .forecast-link:hover, .forecast-link:visited, .forecast-link:active {
+    color: rgba(0, 0, 0, 0.6); }
+  .forecast-link:hover .forecast-icon {
+    transform: translateX(0.5rem); }
 
 .weather-details {
   display: inline-block;
@@ -237,6 +259,9 @@ body {
     margin-bottom: 1rem; }
 
   .weather-description {
-    margin: 0 auto; } }
+    margin: 0 auto; }
+
+  .forecast-link {
+    margin: 2rem 0 0; } }
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Details from './Details';
 import Main from './Main';
 import NameSearchContainer from './NameSearch';
@@ -35,7 +36,9 @@ const Weather = ({
   inputActive,
   deactivateInput
 }) => {
+  const currentDate = new Date(data.dt).toDateString();
   return (
+
     <section className="weather-content"
       onClick={
         (e) => {
@@ -49,7 +52,11 @@ const Weather = ({
 
       <div>
 
+        <p className="current-date">{ currentDate }</p>
+
         <Main data={ data } unit={tempUnit }/>
+
+        <Link className="forecast-link" to="/forecast">five day forecast <i className="fa fa-long-arrow-right forecast-icon"></i></Link>
 
         <Details data={ data }/>
 
